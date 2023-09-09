@@ -108,11 +108,27 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     getItem("Files", "9", <FileOutlined />)
   ];
 
-  const [windowSize, setWindowSize] = useState(screen.width);
+  const [windowSize, setWindowSize] = useState<number>(0);
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer }
   } = theme.useToken();
+
+  useEffect(() => {
+    if (windowSize === 0) {
+      setWindowSize(screen.width);
+    }
+
+    const handleWindowResize = () => {
+      setWindowSize(screen.width);
+    };
+
+    window.addEventListener("resize", handleWindowResize);
+
+    return () => {
+      window.removeEventListener("resize", handleWindowResize);
+    };
+  }, []);
 
   useEffect(() => {
     console.log(windowSize);
@@ -124,18 +140,6 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       setCollapsed(false);
     }
   }, [windowSize]);
-
-  useEffect(() => {
-    const handleWindowResize = () => {
-      setWindowSize(screen.width);
-    };
-
-    window.addEventListener("resize", handleWindowResize);
-
-    return () => {
-      window.removeEventListener("resize", handleWindowResize);
-    };
-  }, []);
 
   return (
     <html lang="en">

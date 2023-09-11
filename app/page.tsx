@@ -1,12 +1,20 @@
-//import Image from 'next/image'
-//import styles from './page.module.css'
-import { Button } from "antd";
+import { Row, Col } from "antd";
 
 export default function Home() {
   console.log("Home Page");
   return (
     <div>
-      <Button type="primary">test</Button>
+      <Row>
+        <Col xs={24} md={12} xl={8}>
+          One of three columns
+        </Col>
+        <Col xs={24} md={12} xl={8}>
+          One of three columns
+        </Col>
+        <Col xs={24} md={12} xl={8}>
+          One of three columns
+        </Col>
+      </Row>
     </div>
   );
 }

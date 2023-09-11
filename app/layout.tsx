@@ -28,7 +28,8 @@ import {
   theme,
   ConfigProvider,
   Avatar,
-  Dropdown
+  Dropdown,
+  Drawer
 } from "antd";
 import type { MenuProps } from "antd";
 import { Footer } from "antd/es/layout/layout";
@@ -110,13 +111,33 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
 
   const [windowSize, setWindowSize] = useState<number>(0);
   const [collapsed, setCollapsed] = useState(false);
+  const [mobile, setMobile] = useState(false);
+  const [open, setOpen] = useState(false);
   const {
     token: { colorBgContainer }
   } = theme.useToken();
 
+  const onClose = () => {
+    setOpen(false);
+  };
+  const handleOpenClose = () => {
+    if (mobile) {
+      setOpen(!open);
+    } else {
+      setCollapsed(!collapsed);
+    }
+  };
   useEffect(() => {
     if (windowSize === 0) {
       setWindowSize(screen.width);
+    }
+
+    if (screen.width < 500) {
+      setMobile(true);
+      setCollapsed(false);
+    } else {
+      setMobile(false);
+      setCollapsed(false);
     }
 
     const handleWindowResize = () => {
@@ -138,6 +159,12 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
 
     if (windowSize >= 768) {
       setCollapsed(false);
+    }
+
+    if (screen.width < 500) {
+      setMobile(true);
+    } else {
+      setMobile(false);
     }
   }, [windowSize]);
 
@@ -174,7 +201,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                     icon={
                       collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />
                     }
-                    onClick={() => setCollapsed(!collapsed)}
+                    onClick={handleOpenClose}
                     style={{
                       fontSize: "16px"
                     }}
@@ -204,21 +231,40 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                 </div>
               </Header>
               <Layout>
-                <Sider
-                  className="headerSm"
-                  theme="light"
-                  collapsible
-                  breakpoint={"sm"}
-                  trigger={null}
-                  collapsed={collapsed}
-                >
-                  <Menu
+                {!mobile ? (
+                  <Sider
+                    className="headerSm"
                     theme="light"
-                    defaultSelectedKeys={["1"]}
-                    mode="inline"
-                    items={items}
-                  />
-                </Sider>
+                    collapsible
+                    breakpoint={"sm"}
+                    trigger={null}
+                    collapsed={collapsed}
+                    collapsedWidth={mobile ? 0 : 60}
+                  >
+                    <Menu
+                      theme="light"
+                      defaultSelectedKeys={["1"]}
+                      mode="inline"
+                      items={items}
+                    />
+                  </Sider>
+                ) : (
+                  <Drawer
+                    title="Basic Drawer"
+                    placement="left"
+                    onClose={onClose}
+                    open={open}
+                    width={200}
+                  >
+                    <Menu
+                      theme="light"
+                      defaultSelectedKeys={["1"]}
+                      mode="inline"
+                      items={items}
+                    />
+                  </Drawer>
+                )}
+
                 <Content className="mainContent">{children}</Content>
               </Layout>
               <Footer style={{ backgroundColor: "#344054", height: "5vh" }}>

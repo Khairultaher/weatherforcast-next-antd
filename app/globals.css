@@ -48,6 +48,19 @@
   justify-content: space-between;
 }
 
+
+
+.ant-drawer-header{
+  padding: 18px 22px 17px 22px !important;
+  border-bottom: 3px solid #EC1C24 !important;
+}
+
+.ant-drawer-body{
+  padding-top: .20rem !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
 @media (max-width:576px){
   .headerSm {
     width: 20vw;
